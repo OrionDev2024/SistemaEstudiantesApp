@@ -95,15 +95,49 @@ public class EstudianteDAO {
         }
         return false;
     }
+    public boolean modificarEstudiante(Estudiante estudiante){
+        PreparedStatement ps;
+        Connection con = getConexion();
+        String sql = "UPDATE estudiante SET nombre=?, apellido=?, telefono=?, email=? WHERE id_estudiante = ?";
+
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, estudiante.getNombre());
+            ps.setString(2, estudiante.getApellido());
+            ps.setString(3, estudiante.getTelefono());
+            ps.setString(4, estudiante.getEmail());
+            ps.setInt(5, estudiante.getIdEstudiante());
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Ocurrio un error al actualizar el estudiante: " + e.getMessage());
+        }
+        finally {
+            try {
+                con.close();
+            }catch (Exception e){
+                System.out.println("Error al cerrar la conexion: " + e.getMessage());
+            }
+        }
+        return false;
+    }
     public static void main(String[] args) {
         var estudianteDao = new EstudianteDAO();
-        var nuevoEstudiante = new Estudiante("Carlos", "lara", "33344555", "carlos@mail.com" );
-        var agregado = estudianteDao.agregarEstudiante(nuevoEstudiante);
-        if(agregado){
-            System.out.println("Estudiante agregado: " + nuevoEstudiante);
+        //var nuevoEstudiante = new Estudiante("Carlos", "lara", "33344555", "carlos@mail.com" );
+        //var agregado = estudianteDao.agregarEstudiante(nuevoEstudiante);
+        //if(agregado){
+          //  System.out.println("Estudiante agregado: " + nuevoEstudiante);
+        //}else {
+          //  System.out.println("No se agrego el estudiante: " + nuevoEstudiante);
+        //}
 
+        //modificamos un estudiante existente 1
+        var estudianteModificar = new Estudiante(1, "Jose william", "Lopez rebellon", "44332211", "joseWill@mail.com");
+        var modificado = estudianteDao.modificarEstudiante(estudianteModificar);
+        if (modificado){
+            System.out.println("Estudiante modificado: " + estudianteModificar);
         }else {
-            System.out.println("No se agrego el estudiante: " + nuevoEstudiante);
+            System.out.println("No se modifico el estudiante: " + estudianteModificar);
         }
         //Listar los estudiantes
         System.out.println("Listado estudiantes: ");
