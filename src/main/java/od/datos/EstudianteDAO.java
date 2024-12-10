@@ -121,6 +121,27 @@ public class EstudianteDAO {
         }
         return false;
     }
+    public boolean eliminarEstudiante(Estudiante estudiante){
+        PreparedStatement ps;
+        Connection con = getConexion();
+        String sql = "DELETE FROM estudiante WHERE id_estudiante = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, estudiante.getIdEstudiante());
+            ps.execute();
+            return  true;
+        } catch (Exception e) {
+            System.out.println("Error al eliminar estudiante: " + e.getMessage());
+        }
+        finally {
+            try {
+                con.close();
+            }catch (Exception e){
+                System.out.println("Error al cerrar la conexion: " + e.getMessage());
+            }
+        }
+        return false;
+    }
     public static void main(String[] args) {
         var estudianteDao = new EstudianteDAO();
         //var nuevoEstudiante = new Estudiante("Carlos", "lara", "33344555", "carlos@mail.com" );
@@ -132,13 +153,19 @@ public class EstudianteDAO {
         //}
 
         //modificamos un estudiante existente 1
-        var estudianteModificar = new Estudiante(1, "Jose william", "Lopez rebellon", "44332211", "joseWill@mail.com");
-        var modificado = estudianteDao.modificarEstudiante(estudianteModificar);
-        if (modificado){
-            System.out.println("Estudiante modificado: " + estudianteModificar);
-        }else {
-            System.out.println("No se modifico el estudiante: " + estudianteModificar);
-        }
+        //var estudianteModificar = new Estudiante(1, "Jose william", "Lopez rebellon", "44332211", "joseWill@mail.com");
+        //var modificado = estudianteDao.modificarEstudiante(estudianteModificar);
+        //if (modificado){
+          //  System.out.println("Estudiante modificado: " + estudianteModificar);
+        //}else {
+          //  System.out.println("No se modifico el estudiante: " + estudianteModificar);
+        //}
+        var estudianteEliminar = new Estudiante(3);
+        var eliminado = estudianteDao.eliminarEstudiante(estudianteEliminar);
+        if (eliminado)
+            System.out.println("Estudiante eliminado: " + estudianteEliminar);
+        else
+            System.out.println("No se elimino estudiante: " + estudianteEliminar);
         //Listar los estudiantes
         System.out.println("Listado estudiantes: ");
         List<Estudiante> estudiantes = estudianteDao.listarEstudiantes();
