@@ -25,7 +25,7 @@ public class SistemaEstudiantesApp {
 
     }
     private static void mostrarMenu(){
-        System.out.println("""
+        System.out.print("""
                 *** Sistema de Estudiantes ***
                 1. Listar Estudiantes.
                 2. Buscar Estudiante.
